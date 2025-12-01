@@ -1,0 +1,108 @@
+# Employee Table – Source to Target Mapping (1:1)
+
+## 1. Document Control
+- Document Name: Employee Source to Target Mapping
+- Version: 1.0
+- Author: Data Engineering Team
+- Created Date: {{CREATED_DATE}}
+- Last Updated: {{LAST_UPDATED}}
+- Subject Area: Human Resources
+
+---
+
+## 2. Purpose
+This document defines the one-to-one (1:1) column-level mapping between the Source Employee table and the Target Employee table. Each target column is directly derived from one source column without transformations unless explicitly stated.
+
+---
+
+## 3. Source System Details
+- Source System Name: {{SOURCE_SYSTEM}}
+- Source Database: {{SOURCE_DATABASE}}
+- Source Schema: {{SOURCE_SCHEMA}}
+- Source Table: {{SOURCE_TABLE}}
+- Data Refresh Frequency: {{SOURCE_REFRESH_FREQUENCY}}
+
+---
+
+## 4. Target System Details
+- Target Platform: {{TARGET_PLATFORM}}
+- Target Database: {{TARGET_DATABASE}}
+- Target Schema: {{TARGET_SCHEMA}}
+- Target Table: {{TARGET_TABLE}}
+- Load Type: {{FULL_OR_INCREMENTAL}}
+- Load Frequency: {{TARGET_REFRESH_FREQUENCY}}
+
+---
+
+## 5. High-Level Mapping Summary
+- Mapping Type: **1:1 (Direct Column Mapping)**
+- Transformation Required: **No (Direct Copy)**
+- Primary Key: **EMPLOYEE_ID**
+- Incremental Column (if applicable): **LAST_UPDATED_TS**
+
+---
+
+## 6. Detailed Column Mapping
+
+| # | Source Column       | Source Data Type | Target Column        | Target Data Type | Nullable  | Key Type | Transformation Rule  | Remarks                          |
+|---|---------------------|------------------|----------------------|------------------|-----------|----------|----------------------|----------------------------------|
+| 1 | EMPLOYEE_ID         | INT              | EMPLOYEE_ID          | BIGINT           | NOT NULL  | PK       | Direct 1:1           | Primary Key                      |
+| 2 | EMPLOYEE_NUMBER     | VARCHAR(50)      | EMPLOYEE_NUMBER      | STRING           | NULL      | NK       | Direct 1:1           | Business Employee Number         |
+| 3 | FIRST_NAME          | VARCHAR(100)     | FIRST_NAME           | STRING           | NULL      | -        | Direct 1:1           |                                  |
+| 4 | LAST_NAME           | VARCHAR(100)     | LAST_NAME            | STRING           | NULL      | -        | Direct 1:1           |                                  |
+| 5 | EMAIL_ADDRESS       | VARCHAR(255)     | EMAIL_ADDRESS        | STRING           | NULL      | -        | Direct 1:1           |                                  |
+| 6 | PHONE_NUMBER        | VARCHAR(50)      | PHONE_NUMBER         | STRING           | NULL      | -        | Direct 1:1           |                                  |
+| 7 | DATE_OF_BIRTH       | DATE             | DATE_OF_BIRTH        | DATE             | NULL      | -        | Direct 1:1           |                                  |
+| 8 | HIRE_DATE           | DATE             | HIRE_DATE            | DATE             | NULL      | -        | Direct 1:1           |                                  |
+| 9 | TERMINATION_DATE    | DATE             | TERMINATION_DATE     | DATE             | NULL      | -        | Direct 1:1           |                                  |
+| 10 | JOB_TITLE          | VARCHAR(150)     | JOB_TITLE            | STRING           | NULL      | -        | Direct 1:1           |                                  |
+| 11 | DEPARTMENT_ID      | INT              | DEPARTMENT_ID        | BIGINT           | NULL      | FK       | Direct 1:1           | Foreign Key to Department        |
+| 12 | MANAGER_ID         | INT              | MANAGER_ID           | BIGINT           | NULL      | FK       | Direct 1:1           | Self-Referencing FK              |
+| 13 | EMPLOYMENT_STATUS  | VARCHAR(50)      | EMPLOYMENT_STATUS    | STRING           | NULL      | -        | Direct 1:1           | Active / Inactive / Terminated   |
+| 14 | SALARY_AMOUNT      | DECIMAL(18,2)    | SALARY_AMOUNT        | NUMERIC(18,2)    | NULL      | -        | Direct 1:1           |                                  |
+| 15 | CURRENCY_CODE      | CHAR(3)          | CURRENCY_CODE        | STRING           | NULL      | -        | Direct 1:1           | ISO Currency Code                |
+| 16 | SRC_CREATE_TS      | TIMESTAMP        | SRC_CREATE_TS        | TIMESTAMP        | NULL      | -        | Direct 1:1           | Source Audit Column              |
+| 17 | SRC_UPDATE_TS      | TIMESTAMP        | SRC_UPDATE_TS        | TIMESTAMP        | NULL      | -        | Direct 1:1           | Source Audit Column              |
+| 18 | LOAD_TS            | N/A              | LOAD_TS              | TIMESTAMP        | NOT NULL  | -        | System Generated     | ETL Load Timestamp               |
+
+---
+
+## 7. Key Definitions
+- **PK:** Primary Key
+- **NK:** Natural Key
+- **FK:** Foreign Key
+
+---
+
+## 8. Data Quality Rules
+
+| Rule ID | Column Name        | Rule Description                                        | Severity |
+|---------|--------------------|---------------------------------------------------------|----------|
+| DQ-01   | EMPLOYEE_ID        | Must not be NULL                                        | Critical |
+| DQ-02   | EMAIL_ADDRESS      | Must follow valid email format                          | High     |
+| DQ-03   | HIRE_DATE          | Must be less than or equal to current date              | Medium   |
+| DQ-04   | EMPLOYMENT_STATUS  | Must be one of (Active, Inactive, Terminated)           | High     |
+
+---
+
+## 9. Load & Reconciliation Checks
+- **Record Count:** Source count must match Target count
+- **Primary Key Uniqueness:** No duplicate EMPLOYEE_ID in Target
+- **Null Check:** No NULLs in mandatory columns
+- **Incremental Check:** Only changed records loaded based on UPDATE_TS
+
+---
+
+## 10. Assumptions & Notes
+- All fields are mapped using direct one-to-one mapping.
+- No business transformations are applied.
+- Target audit column **LOAD_TS** is system-generated.
+- Any future schema changes must be reflected in this document.
+
+---
+
+## 11. Approval
+- **Business Owner:** ________________________
+- **Data Architect:** ________________________
+- **ETL Developer:** ________________________
+- **QA Lead:** ________________________
