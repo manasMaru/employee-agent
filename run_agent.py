@@ -9,4 +9,4 @@ code = agent.generate_code(mapping_text)
 
 agent.write_files(code)
 
-print("End-to-end ETL code generation completed.")
+print("ETL code generation completed.")
