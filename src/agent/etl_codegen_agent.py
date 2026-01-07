@@ -61,6 +61,7 @@ Mapping:
 
 Output ONLY valid Python code.
 Do NOT add explanations.
+Do NOT wrap the code in ``` or ```python.
 """
 
         return self.llm.invoke(prompt).content
