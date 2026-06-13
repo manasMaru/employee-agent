@@ -10,7 +10,7 @@ This project implements a two-phase pipeline:
 
 1. Code Generation Phase  
    - Fetches mapping documents from Confluence  
-   - Converts them into a local markdown file  
+   - Stores them into a local markdown file  
    - Uses an LLM (via LangChain) to generate Python ETL transformation code  
 
 2. Execution Phase  
@@ -146,8 +146,7 @@ python run_employee_etl.py
 ##  Limitations
 
 - Not production-ready  
-- Generated code may not always be consistent  
-- Minimal preprocessing of mapping data  
+- Generated code may not always be consistent
 - LLM adds unnecessary complexity for deterministic transformations  
 
 ---
